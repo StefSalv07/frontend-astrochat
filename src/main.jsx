@@ -7,6 +7,8 @@ import ThemeProvider from "./components/ThemeProvide";
 import App from "./App";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -14,6 +16,7 @@ ReactDOM.render(
       <ThemeProvider>
         <BrowserRouter>
           <App />
+          <ToastContainer />
         </BrowserRouter>
       </ThemeProvider>
     </PersistGate>

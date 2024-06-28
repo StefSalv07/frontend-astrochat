@@ -12,7 +12,7 @@ export const addRatingAsync = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const data = await addRating(formData);
-      console.log("ratingSlice addRating data:", data);
+      // console.log("ratingSlice addRating data:", data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -25,8 +25,8 @@ export const getRatingByAstrologerIdAsync = createAsyncThunk(
   async ({ astroId }, { rejectWithValue }) => {
     try {
       const data = await getRatingByAstrologerId(astroId);
-      console.log("ratingSlice getRating data:", data.data);
-      return data.data;
+      // console.log("ratingSlice getRating data:", data);
+      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -46,12 +46,12 @@ const ratingSlice = createSlice({
       })
       .addCase(addRatingAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.ratings.push(action.payload);
+        state.ratings = action.payload.data;
       })
       .addCase(addRatingAsync.rejected, (state, action) => {
         state.loading = false;
         state.errorMessage = action.payload;
-        state.ratings=[];
+        state.ratings = [];
       })
 
       // Handle getRatingByAstrologerIdAsync
@@ -61,12 +61,12 @@ const ratingSlice = createSlice({
       })
       .addCase(getRatingByAstrologerIdAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.ratings = action.payload;
+        state.ratings = action.payload.data;
       })
       .addCase(getRatingByAstrologerIdAsync.rejected, (state, action) => {
         state.loading = false;
         state.errorMessage = action.payload;
-        state.ratings=[];
+        state.ratings = [];
       });
   },
 });

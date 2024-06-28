@@ -16,7 +16,7 @@ import {
 } from "../features/rating/ratingSlice";
 import { useForm } from "react-hook-form";
 import { selectLoggedInUser, selectError } from "../features/auth/authSlice";
-
+import { toast } from "react-toastify";
 function AstroDetail() {
   const [rating, setRating] = useState(0);
   const dispatch = useDispatch();
@@ -25,8 +25,7 @@ function AstroDetail() {
   const astro = useSelector(selectAstrologers);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
-  const allRatings = useSelector(selectRatings);
-  const [ratings, setRatings] = useState(allRatings);
+  const [ratings, setRatings] = useState([]);
 
   const handleStarClick = (value) => {
     setRating(value);
@@ -41,35 +40,67 @@ function AstroDetail() {
 
   const onRatingSubmit = async (data) => {
     try {
-      const formData = {
-        ...data,
-        rating: rating,
-        astroId: id,
-        userId: loggedInUser._id,
-      };
-
-      const result = await dispatch(addRatingAsync(formData)).unwrap();
-      if (result) {
-        setRatings((prevRatings) => [...prevRatings, result.data]);
+      if (loggedInUser?.role === "guest") {
         reset();
         setRating(0);
+        return toast.error("You are not allowed to give this feedback");
+      } else if (!loggedInUser || loggedInUser.length === 0) {
+        return toast.error("please loign!!");
+      } else {
+        const formData = {
+          ...data,
+          rating: rating,
+          astroId: id,
+          userId: loggedInUser._id,
+        };
+
+        const result = await dispatch(addRatingAsync(formData)).unwrap();
+        // console.log("Add rating result:", result);
+
+        if (result.status === 200) {
+          const newRating = {
+            ...result.data, // Assuming result.data is the new rating object
+            user: {
+              userName: loggedInUser.userName,
+              profilePic: loggedInUser.profilePic,
+            },
+          };
+
+          // Update ratings state with the new rating
+          setRatings((prevRatings) => [...prevRatings, newRating]);
+
+          // Reset form and rating
+          reset();
+          setRating(0);
+        } else {
+          toast.error("Failed to add rating. Please try again later.");
+        }
       }
     } catch (error) {
       console.error("Failed to submit rating:", error);
+      toast.error("Failed to add rating. Please try again later.");
     }
   };
 
   useEffect(() => {
-    dispatch(getAstrologerByIdAsync(id));
-    const result = dispatch(
-      getRatingByAstrologerIdAsync({ astroId: id })
-    ).unwrap();
-    console.log("result:", result);
+    (async () => {
+      await dispatch(getAstrologerByIdAsync(id));
+      try {
+        const result = await dispatch(
+          getRatingByAstrologerIdAsync({ astroId: id })
+        ).unwrap();
+        // console.log("Fetched ratings:", result);
+        if (result.status === 200) {
+          setRatings(result.data);
+        } else {
+          toast.error("Failed to fetch ratings.");
+        }
+      } catch (error) {
+        console.error("Error fetching ratings:", error);
+        toast.error("Failed to fetch ratings.");
+      }
+    })();
   }, [dispatch, id]);
-
-  useEffect(() => {
-    setRatings(allRatings);
-  }, [allRatings]);
 
   return (
     <div className="max-w-5xl mx-auto py-5">

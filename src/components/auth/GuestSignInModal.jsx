@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { AiFillGoogleCircle } from "react-icons/ai";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import {
   Button,
@@ -11,7 +10,7 @@ import {
 } from "flowbite-react";
 import {
   guestSignInAsync,
-  selectError,
+  selectGuestSignInError,
   selectLoading,
   guestOtpVerifyAsync,
 } from "../../features/auth/authSlice";
@@ -24,11 +23,7 @@ function GuestSignInModal({ show, onClose }) {
   const [otp, setOtp] = useState("");
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-
-  const handleGoogleClick = () => {
-    // Handle Google Sign-In click
-  };
+  const error = useSelector(selectGuestSignInError);
 
   const handleBackButton = () => {
     setShowOtpForm(false);
@@ -171,15 +166,6 @@ function GuestSignInModal({ show, onClose }) {
                   ) : (
                     "Sign In"
                   )}
-                </Button>
-                <Button
-                  type="button"
-                  gradientDuoTone="pinkToOrange"
-                  outline
-                  onClick={handleGoogleClick}
-                >
-                  <AiFillGoogleCircle className="w-6 h-6 mr-2" />
-                  Continue with Google
                 </Button>
               </form>
             ) : (

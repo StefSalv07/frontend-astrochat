@@ -179,3 +179,57 @@ export const signOut = async () => {
     );
   }
 };
+
+export const userSignUp = async (formData) => {
+  try {
+    const response = await fetch("/server/users/user/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      const errorMessage = data.message;
+      console.log("errorMessage:", errorMessage);
+      throw new Error(errorMessage || "User Sign-Up failed.");
+    }
+
+    return data;
+  } catch (error) {
+    throw new Error(
+      error.message || "User Sign-Up failed. Please try again later."
+    );
+  }
+};
+
+export const userSignIn = async (formData) => {
+  try {
+    const response = await fetch("/server/users/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      const errorMessage = data.message;
+      console.log("errorMessage:", errorMessage);
+      throw new Error(errorMessage || "User Sign-In failed.");
+    }
+
+    return data;
+  } catch (error) {
+    throw new Error(
+      error.message || "User Sign-In failed. Please try again later."
+    );
+  }
+};
+
+

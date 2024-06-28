@@ -7,13 +7,18 @@ import {
   checkAuth,
   google,
   signOut,
+  userSignUp,
+  userSignIn,
 } from "./authApi";
 
 const initialState = {
   user: [],
   loading: false,
   errorMessage: null,
+  guestSignInError: null,
   astroSignUpError: null,
+  atsroSignInError: null,
+  userSignInError: null,
   isLoggedIn: false,
 };
 
@@ -107,6 +112,32 @@ export const signOutAsync = createAsyncThunk(
   }
 );
 
+export const userSignUpAsync = createAsyncThunk(
+  "auth/userSignUp",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const data = await userSignUp(formData);
+      console.log("authSlice userSignUP data:", data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const userSignInAsync = createAsyncThunk(
+  "auth/userSignIn",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const data = await userSignIn(formData);
+      console.log("authSlice userSignIn data:", data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -126,45 +157,46 @@ const authSlice = createSlice({
       //handle guestSignInAsync
       .addCase(guestSignInAsync.pending, (state) => {
         state.loading = true;
-        state.errorMessage = null;
+        state.guestSignInError = null;
       })
       .addCase(guestSignInAsync.fulfilled, (state, action) => {
         state.loading = false;
+        state.guestSignInError = null;
       })
       .addCase(guestSignInAsync.rejected, (state, action) => {
         state.loading = false;
-        state.errorMessage = action.payload;
+        state.guestSignInError = action.payload;
       })
 
       //handle astrologerSignInAsync
       .addCase(astrologerSignInAsync.pending, (state) => {
         state.loading = true;
-        state.errorMessage = null;
+        state.atsroSignInError = null;
       })
       .addCase(astrologerSignInAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.errorMessage = null;
+        state.atsroSignInError = null;
         state.user = action.payload;
       })
       .addCase(astrologerSignInAsync.rejected, (state, action) => {
         state.loading = false;
-        state.errorMessage = action.payload;
+        state.atsroSignInError = action.payload;
       })
 
       //handle guestOtpVerifyAsync
       .addCase(guestOtpVerifyAsync.pending, (state) => {
         state.loading = true;
-        state.errorMessage = null;
+        state.guestSignInError = null;
       })
       .addCase(guestOtpVerifyAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.errorMessage = null;
+        state.guestSignInError = null;
         state.user = action.payload;
         state.isLoggedIn = true;
       })
       .addCase(guestOtpVerifyAsync.rejected, (state, action) => {
         state.loading = false;
-        state.errorMessage = action.payload;
+        state.guestSignInError = action.payload;
       })
 
       // Handle astrologerSignUpAsync
@@ -226,6 +258,38 @@ const authSlice = createSlice({
       .addCase(signOutAsync.rejected, (state, action) => {
         state.loading = false;
         state.errorMessage = action.payload || "Sign out failed";
+      })
+
+      //handle userSignUpAsync
+      .addCase(userSignUpAsync.pending, (state) => {
+        state.loading = true;
+        state.userSignInError = null;
+      })
+      .addCase(userSignUpAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userSignInError = null;
+        state.user = [];
+        state.isLoggedIn = false;
+      })
+      .addCase(userSignUpAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.userSignInError = action.payload || "Sign up failed";
+      })
+
+      //handle userSignInAsync
+      .addCase(userSignInAsync.pending, (state) => {
+        state.loading = true;
+        state.userSignInError = null;
+      })
+      .addCase(userSignInAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userSignInError = null;
+        state.user = action.payload.data;
+        state.isLoggedIn = true;
+      })
+      .addCase(userSignInAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.userSignInError = action.payload || "Sign up failed";
       });
   },
 });
@@ -233,7 +297,12 @@ const authSlice = createSlice({
 export default authSlice.reducer;
 export const { setUser, clearUser } = authSlice.actions;
 export const selectLoggedInUser = (state) => state.auth.user;
+
+export const selectGuestSignInError = (state) => state.auth.guestSignInError;
 export const selectAstroSignUpError = (state) => state.auth.astroSignUpError;
+export const selectAtsroSignInError = (state) => state.auth.atsroSignInError;
+export const selectUserSignInError = (state) => state.auth.userSignInError;
+
 export const selectError = (state) => state.auth.errorMessage;
 export const selectLoading = (state) => state.auth.loading;
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
