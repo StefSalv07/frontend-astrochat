@@ -100,18 +100,18 @@ function GuestSignInModal({ show, onClose }) {
                 <div>
                   <div className="mb-2 block">
                     <Label
-                      htmlFor="name"
+                      htmlFor="userName"
                       value="Your Name"
                       className="text-n-2"
                     />
                   </div>
                   <TextInput
-                    id="name"
+                    id="userName"
                     type="text"
                     placeholder="Enter Your Name"
-                    {...register("name", { required: true })}
+                    {...register("userName", { required: true })}
                   />
-                  {errors.name && (
+                  {errors.userName && (
                     <span className="text-red-500 text-sm">
                       This field is required
                     </span>

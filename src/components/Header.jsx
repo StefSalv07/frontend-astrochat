@@ -89,10 +89,11 @@ function Header() {
               >
                 <DropdownHeader>
                   <span className="block text-sm">
-                    @{loggedInUser?.username}
+                    {loggedInUser?.userName}
                   </span>
                   <span className="block text-sm font-medium truncate">
-                    {loggedInUser?.email}
+                    @{loggedInUser?.email}
+                  
                   </span>
                 </DropdownHeader>
                 {loggedInUser?.isAdmin ? (
