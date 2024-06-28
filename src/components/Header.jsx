@@ -28,7 +28,6 @@ function Header() {
   const theme = useSelector(selectCurrentTheme);
   const { pathname } = useLocation();
   const [showUserSignIn, setShowUserSignIn] = useState(false);
-  const [showUserSignUp, setShowUserSignUp] = useState(false);
   const [showGuestSignIn, setShowGuestSignIn] = useState(false);
 
   const handleSignout = async () => {
@@ -115,7 +114,7 @@ function Header() {
             </>
           ) : (
             <>
-              <Link to="/sign-in">
+              <Link>
                 <Button outline onClick={() => setShowGuestSignIn(true)}>
                   Guest
                   <HiOutlineArrowRight className="ml-2 h-5 w-5" />
@@ -143,16 +142,16 @@ function Header() {
             <Link to="/chat-with-astro">Chat With Astro</Link>
           </NavbarLink>
         </NavbarCollapse>
-        <UserSignInModal
-          show={showUserSignIn}
-          onClose={() => setShowUserSignIn(false)}
-        />
-        <GuestSignInModal
-          show={showGuestSignIn}
-          onClose={() => setShowGuestSignIn(false)}
-        />
-        {/* <UserSignUpModel show={} onClose={}/> */}
       </Navbar>
+
+      <UserSignInModal
+        show={showUserSignIn}
+        onClose={() => setShowUserSignIn(false)}
+      />
+      <GuestSignInModal
+        show={showGuestSignIn}
+        onClose={() => setShowGuestSignIn(false)}
+      />
     </div>
   );
 }
