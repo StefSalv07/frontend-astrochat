@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { categories, languages, gender } from "../constants";
-import { Button, Modal, Rating, Spinner } from "flowbite-react";
+import { Button, Modal, Rating, Spinner, Toast } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllAstrologersAsync,
   selectAstrologers,
   selectLoading,
 } from "../features/astrologer/astroSlice";
+import { img } from "../assets";
 
 function ChatWithAstro() {
   const dispatch = useDispatch();
@@ -49,25 +50,33 @@ function ChatWithAstro() {
 
   const handleFilterChange = (setter, value) => (e) => {
     const checked = e.target.checked;
-    setter((prev) => (checked ? [...prev, value] : prev.filter((v) => v !== value)));
+    setter((prev) =>
+      checked ? [...prev, value] : prev.filter((v) => v !== value)
+    );
   };
 
   const filterData = () => {
-    let filteredData = Array.isArray(chatWithAstro) 
+    let filteredData = Array.isArray(chatWithAstro)
       ? chatWithAstro.filter((astro) =>
           astro.userName.toLowerCase().includes(searchQuery.toLowerCase())
         )
       : [];
 
     if (sortBy) {
-      const sortKey = sortBy.includes("pricePerMin") ? "pricePerMin" : "experience";
+      const sortKey = sortBy.includes("pricePerMin")
+        ? "pricePerMin"
+        : "experience";
       const sortOrder = sortBy.includes("LowToHigh") ? 1 : -1;
-      filteredData = filteredData.sort((a, b) => (a[sortKey] - b[sortKey]) * sortOrder);
+      filteredData = filteredData.sort(
+        (a, b) => (a[sortKey] - b[sortKey]) * sortOrder
+      );
     }
 
     if (selectedCategories.length > 0) {
       filteredData = filteredData.filter((astro) =>
-        selectedCategories.some((category) => astro.primarySkills.includes(category))
+        selectedCategories.some((category) =>
+          astro.primarySkills.includes(category)
+        )
       );
     }
 
@@ -103,6 +112,12 @@ function ChatWithAstro() {
       ))}
     </div>
   );
+
+  const handleChatClick = () => {
+    alert(
+      "this service is temporary  not available contact admin for the service."
+    );
+  };
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -149,10 +164,11 @@ function ChatWithAstro() {
                   <div className="flex flex-col sm:flex-row items-center sm:items-start">
                     <Link to={`/astro-Details/${astro._id}`}>
                       <img
-                        src={
-                          astro.image ||
-                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                        }
+                        // src={
+                        //   astro.image ||
+                        //   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                        // }
+                        src={astro.image || img}
                         alt={astro.userName}
                         className="h-32 w-32 rounded-full shadow-lg mb-4 sm:mb-0 sm:mr-6"
                       />
@@ -177,6 +193,7 @@ function ChatWithAstro() {
                         gradientDuoTone="purpleToBlue"
                         size="lg"
                         className="mt-3 rounded-3xl"
+                        onClick={handleChatClick}
                       >
                         Chat{" "}
                         <IoChatbubbleEllipsesOutline className="ml-2 h-5 w-5" />

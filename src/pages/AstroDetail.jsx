@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { defaultUserImage } from "../constants";
+import {img} from "../assets"
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { Button, Spinner, Rating, Textarea } from "flowbite-react";
 import { useParams } from "react-router-dom";
@@ -113,8 +114,13 @@ function AstroDetail() {
               <>
                 <div className="flex flex-col md:flex-row justify-center md:justify-start items-center mx-auto">
                   <div className="mb-6 md:mb-0">
-                    <img
+                    {/* <img
                       src={astro.image || defaultUserImage}
+                      alt=""
+                      className="h-36 md:h-60 lg:h-72 w-36 md:w-60 lg:w-72 rounded-full mx-auto md:mx-0"
+                    /> */}
+                      <img
+                      src={astro.image || img}
                       alt=""
                       className="h-36 md:h-60 lg:h-72 w-36 md:w-60 lg:w-72 rounded-full mx-auto md:mx-0"
                     />

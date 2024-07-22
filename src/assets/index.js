@@ -5,4 +5,5 @@ import decisionMaking from "./about/decisionMaking.webp"
 import selfUnderstanding from "./about/selfUnderstanding.webp"
 import relationAndCompatibility from "./about/relationAndCompatibility.webp"
 
-export {decisionMaking, selfUnderstanding, relationAndCompatibility,banner1}
+import img from "./doc8.jpg"
+export {decisionMaking, selfUnderstanding, relationAndCompatibility,banner1,img}

@@ -17,8 +17,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import CustomOtpInput from "../design/CustomOtpInput";
+import {useNavigate} from "react-router-dom"
 
 function GuestSignInModal({ show, onClose }) {
+  const navigate=useNavigate();
   const [showOtpForm, setShowOtpForm] = useState(false);
   const [otp, setOtp] = useState("");
   const dispatch = useDispatch();
@@ -58,6 +60,7 @@ function GuestSignInModal({ show, onClose }) {
         setShowOtpForm(false);
         onClose();
         reset();
+        navigate("/chat-with-astro")
       }
     } catch (error) {
       console.error("OTP submission error: ", error);

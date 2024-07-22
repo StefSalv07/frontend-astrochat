@@ -5,7 +5,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/server": {
-        target: "https://astrochat-backend.onrender.com",
+        // target: "https://astrochat-backend.onrender.com",
+        target: "http://localhost:5000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/server/, ""), // Remove '/server' prefix
       },

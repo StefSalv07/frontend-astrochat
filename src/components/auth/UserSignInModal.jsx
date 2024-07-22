@@ -21,9 +21,11 @@ import {
   selectUserSignInError,
 } from "../../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {useNavigate} from "react-router-dom"
 
 function UserSignInModel({ show, onClose }) {
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const loading = useSelector(selectLoading);
   const signInError = useSelector(selectUserSignInError);
   const [showSignUpForm, setShowSignUpForm] = useState(false);
@@ -69,6 +71,7 @@ function UserSignInModel({ show, onClose }) {
         onClose();
         setShowSignUpForm(false);
         signInReset();
+        navigate("/chat-with-astro")
       }
     } catch (error) {
       console.log(error);
